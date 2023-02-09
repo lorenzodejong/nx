@@ -1,5 +1,6 @@
 import { cypressInitGenerator } from '@nrwl/cypress';
 import {
+  ensurePackage,
   formatFiles,
   GeneratorCallback,
   logger,
@@ -50,6 +51,15 @@ export async function angularInitGenerator(
 
   const options = normalizeOptions(rawOptions);
   setDefaults(tree, options);
+
+  const packagesToInstall = [
+    '@angular-devkit/core',
+    '@angular-devkit/schematics',
+    '@schematics/angular',
+  ];
+  packagesToInstall.forEach((packageToInstall) =>
+    ensurePackage(tree, packageToInstall, angularVersion)
+  );
 
   const depsTask = !options.skipPackageJson
     ? updateDependencies(tree)
